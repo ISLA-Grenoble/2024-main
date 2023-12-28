@@ -3,15 +3,15 @@
 Hi :wave: 
 
 This is the main page to look for details of our classes on "Introduction to 
-statistical learning and applications" in 2024. We **won't be using Chamilo**, so
-you should be checking this page regularly.
+statistical learning and applications" in 2024. Plase note that we **won't be using Chamilo**, 
+so you should be checking this page regularly for updates.
 
-**Instructors**:
+### Instructors
 - [Pedro L. C. Rodrigues](https://plcrodrigues.github.io/) — `pedro.rodrigues@inria.fr` (CM, TD, and TP)
 - Alexandre Wendling — `alexandre.wendling@grenoble-inp.org` (TD and TP)
 - Razan Mhanna — `razan.mhanna@inria.fr` (Complementary courses for M1AM students)
 
-**Schedule**:
+### Schedule
 We will meet on Mondays from 15h30 to 18h30. Each time we will have a 1h30 CM 
 and a 1h30 TD or TP session. The (initial) plan for the topics of each of our 
 classes is the following:
