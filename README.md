@@ -19,8 +19,8 @@ and a 1h30 TD or TP session. The (initial) plan for the topics of each of our
 classes is the following:
 
 - **Week 1 (29-January 2024)** 
-CM1: Introduction, simple linear regression, multivariate statistics
-TD1: Exercises on multivariate statistics
+  - CM1: Introduction, simple linear regression, multivariate statistics
+  - TD1: Exercises on multivariate statistics
 
 - **Week 2 (05-February 2023)** 
   - CM2: Multiple linear regression
