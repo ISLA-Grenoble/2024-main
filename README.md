@@ -1,8 +1,10 @@
-# Introduction to statistical learning and applications -- 2024
+# Introduction to statistical learning and applications 2024
 
 Hi :wave: 
 
-This is the page with the details of the main classes for ISLA 2024.
+This is the main page to look for details of our classes on "Introduction to 
+statistical learning and applications" in 2024. We **won't be using Chamilo**, so
+you should be checking this page regularly.
 
 **Instructors**:
 - [Pedro L. C. Rodrigues](https://plcrodrigues.github.io/) — `pedro.rodrigues@inria.fr` (CM, TD, and TP)
