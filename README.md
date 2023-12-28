@@ -3,7 +3,7 @@
 Hi :wave: 
 
 This is the main page to look for details of our classes on "Introduction to 
-statistical learning and applications" in 2024. Plase note that we **won't be using Chamilo**, 
+statistical learning and applications" in 2024. Please note that we **won't be using Chamilo**, 
 so you should be checking this page regularly for updates.
 
 ### Instructors
@@ -59,3 +59,19 @@ classes is the following:
 - **Week 11 (29-April 2023)**
   - CM11: Community detection in graphs
   - TP4: Graph mining and community detection
+
+### Textbooks
+
+- Our course has an official booklet available [[here](https://cloud.univ-grenoble-alpes.fr/s/iTtXPTdLpyMwBtN)]
+    - **Important**: Please note that although this is the “official” booklet, the materials covered in class are not entirely included in it. Also, I won’t be presenting everything that is written in the booklet. Conclusion: to be sure of what I’ve given in class, you should always come to classes! (and take a look at the slides)
+- Many examples and explanations given in class were inspired (or unashamedly copied) from Cosma Shalizi’s excellent lecture notes *“The truth about linear regression”* available [[here](https://www.stat.cmu.edu/~cshalizi/TALR/)]
+- Students should also consider reading some chapters from James et al. (2022) *"Introduction to statistical learning with applications to R"* which is freely (and legally) available [[here](https://www.statlearning.com/)]
+- Another excellent reference is Hastie et al. (2017) *"Elements of Statistical Learning"* which is freely (and legally) available [[here](https://hastie.su.domains/ElemStatLearn/)]
+
+### TP reports
+
+[TODO]
+
+### Some useful resources
+
+[TODO]
