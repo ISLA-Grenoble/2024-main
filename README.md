@@ -6,6 +6,8 @@ This is the main page to look for details of our classes on "Introduction to
 statistical learning and applications" in 2024. Please note that we **won't be using Chamilo**, 
 so you should be checking this page regularly for updates.
 
+[TODO] Table of contents
+
 ### Instructors
 - [Pedro L. C. Rodrigues](https://plcrodrigues.github.io/) — `pedro.rodrigues@inria.fr` (CM, TD, and TP)
 - Alexandre Wendling — `alexandre.wendling@grenoble-inp.org` (TD and TP)
@@ -70,13 +72,13 @@ classes is the following:
 ### Grading
 [TODO]
 
-### About the TP reports
+#### Concerning the TP reports
 The average of the reports for all four TPs count as **half of your final grade**, 
 so be sure to do them properly and nicely. The reports (both `rmd` and `html` files) 
 should be delivered on [Teide](https://teide.ensimag.fr/). If no one in your team has access to it, then you 
 can send your report by e-mail to me or Alexandre, depending on which TP group you are in.
 
-### About the final exam
+#### Concerning the final exam
 [TODO]
 
 ### Some useful resources
