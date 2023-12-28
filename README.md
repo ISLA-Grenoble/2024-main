@@ -19,8 +19,8 @@ and a 1h30 TD or TP session. The (initial) plan for the topics of each of our
 classes is the following:
 
 - **Week 1 (29-January 2024)** 
-  - CM1: Introduction, simple linear regression, multivariate statistics
-  - TD1: Exercises on multivariate statistics
+CM1: Introduction, simple linear regression, multivariate statistics
+TD1: Exercises on multivariate statistics
 
 - **Week 2 (05-February 2023)** 
   - CM2: Multiple linear regression
@@ -72,14 +72,14 @@ classes is the following:
 ### Grading
 [TODO]
 
-#### Concerning the TP reports
+#### -- Concerning the TP reports
 The average of the reports for all four TPs count as **half of your final grade**, 
 so be sure to do them properly and nicely. The reports (both `rmd` and `html` files) 
 should be delivered on [Teide](https://teide.ensimag.fr/). If no one in your team has access to it, then you 
 can send your report by e-mail to me or Alexandre, depending on which TP group you are in.
 
-#### Concerning the final exam
-[TODO]
+#### -- Concerning the final exam
+[TODO] Mention the exercises for training and the article to read beforehand
 
-### Some useful resources
+### Some useful online resources
 [TODO]
