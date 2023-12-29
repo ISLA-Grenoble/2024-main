@@ -9,6 +9,7 @@ so you should be checking this page regularly for updates.
 - [Schedule](#schedule)
 - [Textbooks](#textbooks)
 - [Grading](#grading)
+- [Useful online resources](#some-useful-online-resources)
 
 ### Instructors
 - Pedro L. C. Rodrigues — pedro.rodrigues@inria.fr (CM, TD, and TP)
