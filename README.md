@@ -6,7 +6,9 @@ This is the main page to look for materials of our classes on "Introduction to
 statistical learning and applications" in 2024. Please note that we **won't be using Chamilo**, 
 so you should be checking this page regularly for updates.
 
-[TODO] Table of contents
+- [Schedule](#schedule)
+- [Textbooks](#textbooks)
+- [Grading](#grading)
 
 ### Instructors
 - Pedro L. C. Rodrigues — pedro.rodrigues@inria.fr (CM, TD, and TP)
@@ -70,16 +72,13 @@ classes is the following:
 - Another excellent reference is Hastie et al. (2017) *"Elements of Statistical Learning"* which is freely (and legally) available [here](https://hastie.su.domains/ElemStatLearn/).
 
 ### Grading
-[TODO]
+Your final grade will the average of your TP scores (50%) and the final exam (50%)
 
-#### -- Concerning the TP reports
-The average of the reports for all four TPs count as **half of your final grade**, 
-so be sure to do them properly and nicely. The reports (both `rmd` and `html` files) 
-should be delivered on [Teide](https://teide.ensimag.fr/). If no one in your team has access to it, then you 
-can send your report by e-mail to me or Alexandre, depending on which TP group you are in.
+#### -- Concerning the TP scores
+You will be doing five TPs during this class and your final TP score will be based on the average score of your four best reports. Please be sure to do your reports properly and nicely, always including your `rmd` file in your final submission so your professors can rerun your experiments and code. You should always include the name of all students from your group in your final report. The reports (both `rmd` and `html` files) should be delivered as a `zip` file on [Teide](https://teide.ensimag.fr/). If no one in your team has access to it, then you can send your report by e-mail to [Pedro](mailto:pedro.rodrigues@inria.fr) or [Alexandre](mailto:alexandre.wendling@grenoble-inp.org), depending on which TP group you are in.
 
 #### -- Concerning the final exam
-[TODO] Mention the exercises for training and the article to read beforehand
+The final exam will be a 3h practical evaluation on the computers from ENSIMAG. It will have some multiple-choice questions to evaluate your theoretical knowledge and some practical questions similar to what you will do in the TPs. You will not have access to any internet connections, but you can bring your own handwritten notes, books, printed slides, etc. In the computer that you will use, we will provide you a folder with the instructions for the exam, the `rmd` files to fill with your answers and code, as well as the textbooks of the course.
 
 ### Some useful online resources
 [TODO]
