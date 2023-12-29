@@ -2,16 +2,16 @@
 
 Hi :wave: 
 
-This is the main page to look for details of our classes on "Introduction to 
+This is the main page to look for materials of our classes on "Introduction to 
 statistical learning and applications" in 2024. Please note that we **won't be using Chamilo**, 
 so you should be checking this page regularly for updates.
 
 [TODO] Table of contents
 
 ### Instructors
-- [Pedro L. C. Rodrigues](https://plcrodrigues.github.io/) — `pedro.rodrigues@inria.fr` (CM, TD, and TP)
-- Alexandre Wendling — `alexandre.wendling@grenoble-inp.org` (TD and TP)
-- Razan Mhanna — `razan.mhanna@inria.fr` (Complementary courses for M1AM students)
+- Pedro L. C. Rodrigues — pedro.rodrigues@inria.fr (CM, TD, and TP)
+- Alexandre Wendling — alexandre.wendling@grenoble-inp.org (TD and TP)
+- Razan Mhanna — razan.mhanna@inria.fr (Complementary courses for M1AM students)
 
 ### Schedule
 We will meet on Mondays from 15h30 to 18h30. Each time we will have a 1h30 CM 
@@ -24,43 +24,43 @@ classes is the following:
 
 - **Week 2 (05-February 2023)** 
   - CM2: Multiple linear regression
-  - TP1: Analysis of prostate cancer data
+  - TP1: Regression
 
 - **Week 3 (12-February 2023)**
   - CM3: Cross-validation, model selection, bias-variance tradeoff
-  - TP1: Analysis of prostate cancer data
+  - TP1: Regression
 
 - **Week 4 (19-February 2023)**
   - CM4: Principal component analysis
-  - TD2: Exercises on principal component analysis
+  - TD2: Exercises on linear regression and PCA
 
 - **Week 5 (04-March 2023)**
   - CM5: Linear classification — Discriminative approach
-  - TP2: Principal components regression in genetics
+  - TP2: Principal components regression (PCR)
   
 - **Week 6 (11-March 2023)**
   - CM6: Linear classification — Generative approach
-  - TD3: Exercises on classification
+  - TP2: Principal components regression (PCR)
   
 - **Week 7 (18-March 2023)**
   - CM7: Decision trees
-  - TP2: Principal components regression in genetics
+  - TP3: Benchmarking classification methods
   
 - **Week 8 (25-March 2023)**
   - CM8: Ensemble methods
   - TP3: Benchmarking classification methods
 
 - **Week 9 (08-April 2023)**
-  - CM9: Performance metrics and overfitting
-  - TP3: Benchmarking classification methods
+  - CM9: Performance metrics, overfitting, data leaking, etc
+  - TP4: Random forests
 
 - **Week 10 (15-April 2023)**
   - CM10: Introduction to network analysis
-  - TP4: Graph mining and community detection
+  - TD3: Exercises on classification
 
 - **Week 11 (29-April 2023)**
   - CM11: Community detection in graphs
-  - TP4: Graph mining and community detection
+  - TP5: Community detection
 
 ### Textbooks
 - Our course has an official booklet available [here](https://cloud.univ-grenoble-alpes.fr/s/iTtXPTdLpyMwBtN).
