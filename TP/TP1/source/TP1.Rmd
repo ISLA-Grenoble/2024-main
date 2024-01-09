@@ -1,0 +1,120 @@
+---
+# title: "Template Work/labsheet"
+# author: "Christophe Dutang, Pedro Rodrigues"
+documentclass: article
+papersize: a4
+geometry: top=1.5cm, bottom=2cm, left=1.5cm, right=1.5cm
+fontsize: 11pt
+output:
+  pdf_document:
+    extra_dependencies: ["enumitem"]
+    number_sections: true
+    toc: false
+    keep_tex: false
+    includes:
+      in_header: "TP1-preamble.tex"
+      before_body: "TP1-header.tex"
+      
+---
+
+<!-- see help at https://bookdown.org/yihui/rmarkdown-cookbook/latex-output.html -->
+
+```{r setup, include=FALSE, message=FALSE}
+#see full list >knitr::opts_chunk$get()
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+```
+
+A medical study made on patients with prostate cancer aims to analyze the correlation
+between the prostate tumor volume and a set of clinical and morphometric variables. These
+variables include prostate specific antigens, a biomarker for prostate cancer, and a number of clinical measures (age, prostate weight, etc). The goal of this practical is to build a regression model to predict the severity of cancer, expressed by logarithm of the tumor volume (`lcavol` variable) from the following predictors:
+\begin{enumerate}
+\itemsep0em
+\item[] \code{lpsa}: log of a prostate specific antigen
+\item[] \code{lweight}: log of prostate weight
+\item[] \code{age}: age of the patient
+\item[] \code{lbph}: log of benign prostatic hyperplasia amount
+\item[] \code{svi}: seminal vesicle invasion
+\item[] \code{lcp}: log of capsular penetration
+\item[] \code{gleason}: Gleason score (score on a cancer prognosis test)
+\item[] \code{pgg45}: percent of Gleason scores 4 or 5
+\end{enumerate}
+The file `prostate.data`, available on the course website, contains measures of the logarithm of the tumor volume and of the 8 predictors for 97 patients. This file contains also an additional variable, train, which will not be used and has to be removed.
+
+\section*{$\blacktriangleright$~Exercise 1: Preliminary analysis of the data}
+
+Download the file \code{prostate.data} and store it in your current folder. Read the dataset in \code{R} and make sure that the database appears in the \code{R} search path.
+```{r}
+prostateCancer <- read.table("./prostate.data", header=T)
+attach(prostateCancer)
+```
+
+Build an object \code{prostateCancer} of class \code{data.frame} that contains, for each patient, the \code{lcavol} variable and the values of the 8 predictors. Remove the last column (\code{train}) of the data frame.
+
+*Hint*: You can remove columns in data frames by using negative indices to exclude them. Using \code{headers = T} in \code{read.table} will ensure that the column names are given by \code{names(prostateCancer)}.
+
+Use the command \code{pairs} to visualize the correlations between all the variables. This command generates scatterplots (clouds of points) between all pairs of variables. Analyse the correlations between all the variables and identify the variables which are the most correlated to \code{lcavol}.
+
+\section*{$\blacktriangleright$~Exercise 2: Linear regression}
+
+**(a)** Perform a multiple linear regression to build a predictive model for the \code{lcavol} variable. 
+
+The variables \code{gleason} and \code{svi} should be considered as qualitative variables. You can do this with
+```{r}
+prostateCancer$gleason<-factor(prostateCancer$gleason)
+prostateCancer$svi<-factor(prostateCancer$svi)
+```
+Provide the mathematical equation of the regression model and define the different parameters. Use \code{summary} to display the regression table and explain what are the regression coefficients of the lines which names start by \code{svi} and \code{gleason}. Comment the results of the regression.
+
+**(b)** Give confidence intervals of level 95\% for all the coefficients of the predictors with \code{confint}. Comment the results.
+
+**(c)** What can you say about the effect of the \code{lpsa} variable? Relate your answer to the $p$-value of a test and a confidence interval. 
+
+**(d)** Plot the predicted values of \code{lcavol} as a function of the actual values. Plot the histogram of residuals. Can we admit that the residuals are normally distributed? Compute the residual sum of squares.
+
+**(e)** What do you think of the optimality of this model?
+
+**(f)** What happens if predictors \code{lpsa} and \code{lcp} are removed from the model? Try to explain this new result.
+
+\section*{$\blacktriangleright$~Exercise 3: Best subset selection}
+
+A regression model that uses $k$ predictors is said to be of size $k$. 
+
+For instance, $\texttt{lcavol} = \beta_1~\texttt{lpsa} + \beta_0 + \varepsilon$ and $\texttt{lcavol} = \beta_1~\texttt{lweight} + \beta_0 + \varepsilon$ are models of size 1. The regression model without any predictor $\texttt{lcavol} = \beta_0 + \varepsilon$ is a model of size 0.
+
+The goal of this exercise is to select the best model of size $k$ for each value of $k$ in
+$\{0...8\}$.
+
+**(a)** Describe the models implemented in
+```{r echo = T, results = 'hide'}
+lm(lcavol~1, data=prostateCancer)
+lm(lcavol~., data=prostateCancer[,c(1,4,9)])
+lm(lcavol~., data=prostateCancer[,c(1,2,9)])
+```
+
+**(b)** Compute the residual sums of squares for all models of size $k = 2$. What is the best choice of 2 predictors among 8? *Hint:* \code{combn(m,k)} gives all the combinations of $k$ elements among $n$
+
+**(c)** For each value of $k \in \{0, \dots, 8\}$, select the set of predictors that minimizes the residual sum of squares. Plot the residual sum of squares as a function of $k$. Provide the names of the selected predictors for each value of $k$.
+
+**(d)** Do you think that minimizing the residual sum of squares is well suited to select the optimal size for the regression models? Could you suggest another possibility?
+
+\section*{$\blacktriangleright$~Exercise 4: Split-validation}
+
+You have now found the best model for each of the nine possible model sizes. In the following, we wish to compare these nine different regression models. 
+
+**(a)** Give a brief overview of split-validation: how it works? Why it is not subject to the same issues raised in the item (c) of Exercise 3?
+
+**(b)** The validation set will be composed of all individuals whose indices are a multiple of 3. Store these indices in a vector called valid. *Hint:* Use \code{(1:n) \%\% 3 == 0} where `n` is the number of individuals. 
+
+**(c)** Let us assume that the best model is of size 2 and contains the $i$-th and $j$-th predictor (replace $i$ and $j$ by their true values). Describe what is evaluated when running \code{lm(lcavol $\sim$., data=prostateCancer[!valid, c(1, i, j)])}. What is the mean training error for the model ?
+
+**(d)** Predict values of \code{lcavol} on the validation set for the regression model of size two. Compute the mean prediction error and compare it to the mean training error. *Hint*: Use \code{?predict.lm}. Note that you will have to provide the matrix containing the data of the validation set to the \code{predict} function, using the \code{newdata} argument. 
+
+**(e)** Reusing part of the code implemented in Exercises (a)--(c), perform split-validation to compare the 9 different models. Plot the training and prediction errors as a function of the size of the regression models. Choose one model, giving the parameter estimates for the model trained on the whole dataset, and explain your choice. 
+
+**(f)** What is the main limitation of split-validation ? Illustrate this issue on the cancer dataset. What could you do to address this problem for split-validation? Code such alternative method and comment the result.
+
+\section*{$\blacktriangleright$~Exercise 5: Conclusion}
+
+What is your conclusion about the choice of the best model to predict \code{lcavol}? 
+
+Apply the best model and comment the results.

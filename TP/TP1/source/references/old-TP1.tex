@@ -1,0 +1,167 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper, 
+	total={6in, 8in}, 
+	top=20mm, 
+	left=20mm,
+	right=25mm]
+	{geometry}
+
+\usepackage[latin1]{inputenc}
+% iso-8859-1 
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{color}
+
+
+\setlength{\parindent}{0pt}
+
+\newcommand{\dps}{\displaystyle}
+
+\newcommand{\R}{\texttt{R}~}
+
+\newcommand{\MA}{{\mathcal A}}
+\newcommand{\MC}{{\mathcal C}}
+\newcommand{\MD}{{\mathcal D}}
+\newcommand{\ME}{{\mathcal E}}
+\newcommand{\MF}{{\mathcal F}}
+\newcommand{\MG}{{\mathcal G}}
+\newcommand{\MK}{{\mathcal K}}
+\newcommand{\MN}{{\mathcal N}}
+\newcommand{\MO}{{\mathcal O}}
+\newcommand{\MQ}{{\mathcal Q}}
+\newcommand{\MV}{{\mathcal V}}
+
+\newcommand{\NN}{\ensuremath{\mathbb{N}}}
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\newtheorem{defin}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+
+\begin{document}
+
+\title{\textbf{Statistical Analysis and Document Mining} \\[1em] TP1: Multiple linear regression}
+\date{\vspace{-2em}February 2022}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Each team has to upload a report on Teide before the deadline indicated at the course website. The report should contain graphical representations. For each graph, axis names should be provided as well as a legend when it is appropriate. Figures should be explained by a few sentences in the text. Answer to the questions in order and refer to the question number in your report. Computations and graphics have to be performed with \R.\\
+
+The report should be written using the Rmarkdown format. It is a file format that allows
+users to format documents containing text, R instructions and the results provided by R when running instructions. The set of R instructions is included in the .rmd document so that it may be possible to replicate your analyzes using the \texttt{rmd} file. From your \texttt{rmd} file, you are asked to generate an \texttt{.html} file for the final report. In Teide, you are asked to submit both the \texttt{rmd} and the \texttt{html} files. In the \texttt{html} file, you should limit the displayed \R code to the most important instructions.\\
+
+Part I and Part II are independent.
+
+\newpage
+\subsection*{Part 1: Multiple regression on simulated data}
+\begin{enumerate}
+\item Set the seed of the random generator to 0 (\code{set.seed(0)}). Simulate $6,000 \times 201 = 1,206,000$ independent random variables with the standard normal distribution. Store them into a matrix, then into a data frame with 6,000 lines and 201 columns. Each of these columns is referred to as a ``variable''. Useful commands: \code{rnorm, matrix, data.frame}.
+\item Define a Gaussian multiple linear regression model using the last 200 variables to predict the first one. In the report, write a mathematical equation (do not write \R code!) to define this model. Write a mathematical equation defining the true regression model associated with the data. Compare both models.
+\item Estimate the parameters of the linear model using the last 200 variables to predict the first one. Compute the number of coefficients assessed as significantly non-zero at level 5\%. Comment the result. Useful commands: \code{summary(reg)\$coefficients}.
+\item Simulate a sample of size $n = 1000$ of the following model:
+\begin{equation*}
+\begin{array}{rcl}
+X_{1,i} &=& \varepsilon_{1,i} \\
+X_{2,i} &=& 3X_{1,i} + \varepsilon_{2,i} \\
+Y_{i} &=& X_{2,i} + X_{1,i} + 2 + \varepsilon_{3,i}
+\end{array}
+\end{equation*}
+where $i \in \{1,\dots, n\}$ and the $\varepsilon_{ij}$ are independent $\mathcal{N}(0,1)$ random variables. For a given $i$, what is the distribution of $(X_{1,i}, X_{2,i})$? Plot the clouds of points of the simulated values of $(X_{1,i}, X_{2,i})_{i=1, \dots, n}$. 
+
+What is its shape? Why?
+
+\item Let us consider the following 2 models:
+\begin{equation*}
+\begin{array}{rrcl}
+\text{Model 1:} & Y_i & = & \beta_1 X_{1,i} + \beta_0 + \tilde{\varepsilon}_{1,i} \\
+\text{Model 2:} & Y_i & = & \beta_2 X_{2,i} + \beta_0 + \tilde{\varepsilon}_{2,i}
+\end{array}
+\end{equation*}
+where the $\tilde{\varepsilon}_{j,i}$ are independent $\mathcal{N}(0, \sigma^2)$ random variables. For n = 1000, check that the estimates of the parameters $\beta_0, \beta_1, \beta_2, \sigma^2$ are close to the true values. Now set the seed to 3 and simulate again $X_{1,i}, X_{2,i}, Y_i$ for $n = 10$. Estimate the parameters. What happens?
+
+\item Let us now consider the model
+$$
+Y_i = \beta_2 X_{2, i} + \beta_1 X_{1, i} + \beta_0 + \varepsilon_i
+$$
+where $i \in \{1,\dots, n\}$ and the $\varepsilon_i$ are independent $\mathcal{N}(0, \sigma^2)$ random variables. For the previously simulated data with $n = 10$, estimate the parameters $\beta_0, \beta_1, \beta_2, \sigma^2$. What can you say about the effects of $X_1$ and $X_2$?
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\subsection*{Part 2: Analysis of prostate cancer data}
+
+A medical study made on patients with prostate cancer aims to analyze the correlation
+between the prostate tumor volume and a set of clinical and morphometric variables. These
+variables include prostate specific antigens, a biomarker for prostate cancer, and a number of clinical measures (age, prostate weight, etc.). The goal of this practical is to build a regression model to predict the severity of cancer, expressed by logarithm of the tumor volume (\code{lcavol} variable) from the following predictors:
+\begin{enumerate}
+\itemsep0em
+\item[] \code{lpsa}: log of a prostate specific antigen
+\item[] \code{lweight}: log of prostate weight
+\item[] \code{age}: age of the patient
+\item[] \code{lbph}: log of benign prostatic hyperplasia amount
+\item[] \code{svi}: seminal vesicle invasion
+\item[] \code{lcp}: log of capsular penetration
+\item[] \code{gleason}: Gleason score (score on a cancer prognosis test)
+\item[] \code{pgg45}: percent of Gleason scores 4 or 5
+\end{enumerate}
+The file \code{prostate.data}, available on Chamilo, contains measures of the logarithm of the tumor volume and of the 8 predictors for 97 patients. This file contains also an additional variable, train, which will not be used and has to be removed.
+
+\begin{enumerate}
+\item \textbf{Preliminary analysis of the data}
+\begin{enumerate}
+\item Download the file \code{prostate.data} and store it in your current folder. Read the data in \R by \code{prostateCancer <- read.table("./prostate.data", header=T)}. Use \code{attach(prostateCancer)} in order to attach the database to the \R search path. Build an object \code{prostateCancer} of class \code{data.frame} that contains, for each patient, the \code{lcavol} variable and the values of the 8 predictors. Remove the last column (\code{train}) of the data frame.\\
+\textit{Help}: You can remove columns in data frames by using negative indices to exclude them. With \code{headers = T in read.table}, the column names are given by \code{names(prostateCancer)}.
+\item Use the command \code{pairs} to visualize the correlations between all the variables. pairs plots scatterplots (clouds of points) between all pairs of variables. Analyse the correlations between all the variables and identify the variables which are the most correlated to \code{lcavol}.
+\end{enumerate}
+\pagebreak
+\item \textbf{Linear regression}
+\begin{enumerate}
+\item Perform a multiple linear regression to build a predictive model for the \code{lcavol} variable. The variables \code{gleason} and \code{svi} have to be considered as qualitative variables (\code{prostateCancer\$gleason<-factor(prostateCancer\$gleason)} and \\\code{prostateCancer\$svi<-factor(prostateCancer\$svi)}). Provide the mathematical equation of the regression model and define the different parameters. Use \code{summary} to display the regression table and explain what are the regression coefficients of the lines which names start by \code{svi} and \code{gleason}. Comment the results of the regression.
+\item Give confidence intervals of level 95\% for all the coefficients of the predictors with \code{confint}. Comment the results.
+\item What can you say about the effect of the \code{lpsa} variable? Relate your answer to the $p$-value of a test and a confidence interval.
+\item Plot the predicted values of \code{lcavol} as a function of the actual values. Plot the histogram of residuals. Can we admit that the residuals are normally distributed? Compute the residual sum of squares.
+\item What do you think of the optimality of this model?
+\item What happens if predictors \code{lpsa} and \code{lcp} are removed from the model? Try to explain this new result.
+\end{enumerate}
+
+\item \textbf{Best subset selection.} A regression model that uses $k$ predictors is said to be of size $k$. For instance, $\texttt{lcavol} = \beta_1~\texttt{lpsa} + \beta_0 + \varepsilon$ and $\texttt{lcavol} = \beta_1~\texttt{lweight} + \beta_0 + \varepsilon$ are models of size 1. The regression model without any predictor $\texttt{lcavol} = \beta_0 + \varepsilon$ is a model of size 0.
+
+The goal of this question is to select the best model of size $k$ for each value of $k$ in
+$\{0...8\}$.
+\begin{enumerate}
+\item Describe the models implemented in
+\begin{enumerate}
+\item[] \code{lm(lcavol $\sim$ 1, data=prostateCancer)}
+\item[] \code{lm(lcavol $\sim$ ., data=prostateCancer[,c(1,4,9)])} 
+\item[] \code{lm(lcavol $\sim$ ., data=prostateCancer[,c(1,2,9)])}
+\end{enumerate}
+Compute their residual sums of squares.
+\item Compute the residual sums of squares for all models of size $k = 2$. What is the best choice of 2 predictors among 8?\\
+\textit{Help:} \code{combn(m,k)} gives all the combinations of $k$ elements among $n$
+\item For each value of $k \in \{0, \dots, 8\}$, select the set of predictors that minimizes the residual sum of squares. Plot the residual sum of squares as a function of $k$. Provide the names of the selected predictors for each value of $k$.
+\item Do you think that minimizing the residual sum of squares is well suited to select the optimal size for the regression models? Could you suggest another possibility?
+\end{enumerate}
+\item \textbf{Split-validation.} You have now found the best model for each of the nine possible model sizes. In the following, we wish to compare these nine different regression models. 
+\begin{enumerate}
+\item Give a brief overview of split-validation: how it works? Why it is not subject to the same issues raised in question 3(c)?
+\item[] The validation set will be composed of all individuals whose indices are a multiple of 3. Store these indices in a vector called valid (use \code{(1:n) \%\% 3 == 0} where n is the number of individuals). 
+\item Let us assume that the best model is of size 2 and contains the $i$-th and $j$-th predictor (replace $i$ and $j$ by their true values). Describe what is evaluated when using the function l\code{m(lcavol $\sim$., data=prostateCancer[!valid, c(1, i, j)])}. What is the mean training error for the model ?
+\item Predict values of \code{lcavol} on the validation set for the regression model of size two. Compute the mean prediction error and compare it to the mean training error. \\
+\textit{Hint}: Use \code{?predict.lm}. Note that you will have to provide the matrix containing the data of the validation set to the \code{predict} function, using the \code{newdata} argument. 
+\item Reusing part of the code implemented in questions (a)--(c), perform split-validation to compare the 9
+different models. Plot the training and prediction errors as a function of the size of the regression models. Choose one model, giving the parameter estimates for the model trained on the whole dataset, and explain your choice. 
+\item What is the main limitation of split-validation ? Illustrate this issue on the cancer dataset. What could you do to address this problem for split-validation? Code such alternative method and comment the result.
+\end{enumerate}
+\item \textbf{Conclusion.} What is your conclusion about the choice of the best model to predict \code{lcavol} ? Apply the best model and comment the results.
+\end{enumerate}
+
+\end{document}
