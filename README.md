@@ -20,13 +20,13 @@ so you should be checking this page regularly for updates.
 We will meet on Mondays from 15h30 to 18h30. Each time we will have a 1h30 CM 
 and a 1h30 TD or TP session. 
 
-We will be doing a total of 11 CM, 5 TP, and 3 TD.
+We will be doing a total of 11 CM, 8 TP sessions, and 3 TD sessions.
 
 The (initial) plan for the topics of each of our classes is the following:
 
 - **Week 1 (29-January 2024)** 
   - CM1: Introduction, simple linear regression, multivariate statistics
-  - TD1: Exercises on multivariate statistics
+  - TD1: Exercises on multivariate statistics -- [pdf]()
 
 - **Week 2 (05-February 2023)** 
   - CM2: Multiple linear regression
