@@ -13,7 +13,7 @@ so you should be checking this page regularly for updates.
 
 ### Instructors
 - Pedro L. C. Rodrigues — pedro.rodrigues@inria.fr (CM, TD, and TP)
-- Alexandre Wendling — alexandre.wendling@grenoble-inp.org (TD and TP)
+- Alexandre Wendling — alexandre.wendling@univ-grenoble-alpes.fr (TD and TP)
 - Razan Mhanna — razan.mhanna@inria.fr (Complementary courses for M1AM students)
 
 ### Schedule
@@ -79,7 +79,7 @@ The (initial) plan for the topics of each of our classes is the following:
 Your final grade will the average of your TP scores (50%) and the final exam (50%)
 
 #### -- Concerning the TP scores
-You will be doing five TPs during this class and your final TP score will be based on the average score of your four best reports. Please be sure to do your reports properly and nicely, always including your `rmd` file in your final submission so your professors can rerun your experiments and code. You should always include the name of all students from your group in your final report. The reports (both `rmd` and `html` files) should be delivered as a `zip` file on [Teide](https://teide.ensimag.fr/). If no one in your team has access to it, then you can send your report by e-mail to [Pedro](mailto:pedro.rodrigues@inria.fr) or [Alexandre](mailto:alexandre.wendling@grenoble-inp.org), depending on which TP group you are in.
+You will be doing five TPs during this class and your final TP score will be based on the average score of your four best reports. Please be sure to do your reports properly and nicely, always including your `rmd` file in your final submission so your professors can rerun your experiments and code. You should always include the name of all students from your group in your final report. The reports (both `rmd` and `html` files) should be delivered as a `zip` file on [Teide](https://teide.ensimag.fr/). If no one in your team has access to it, then you can send your report by e-mail to [Pedro](mailto:pedro.rodrigues@inria.fr) or [Alexandre](mailto:alexandre.wendling@univ-grenoble-alpes.fr), depending on which TP group you are in.
 
 #### -- Concerning the final exam
 The final exam will be a 3h practical evaluation on the computers from ENSIMAG. It will have some multiple-choice questions to evaluate your theoretical knowledge and some practical questions similar to what you will do in the TPs. You will not have access to any internet connections, but you can bring your own handwritten notes, books, printed slides, etc. In the computer that you will use, we will provide you a folder with the instructions for the exam, the `rmd` files to fill with your answers and code, as well as the textbooks of the course.
