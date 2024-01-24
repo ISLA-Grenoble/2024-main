@@ -1,0 +1,173 @@
+---
+title: "The impact of collinearity"
+author: "Pedro L. C. Rodrigues"
+date: "08-February 2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+# set the random seed for reproducible results
+set.seed(123)
+```
+
+In this example, we will be considering data generated via the following model
+$$
+(\mathcal{M}) \quad Y = 1 + 5X_1 - 4X_2 + \varepsilon
+$$
+with $\varepsilon \sim \mathcal{N}(0, 4)$.
+
+We will be assuming that we are given data from two predictors $X_1$ and $X_2$ that follow a two-dimensional Gaussian distribution as per
+$$
+\left[
+\begin{array}{c}
+X_1 \\
+X_2
+\end{array}
+\right] \sim \mathcal{N}\left(\left[
+\begin{array}{c}
+0 \\
+0
+\end{array}
+\right], \left[
+\begin{array}{cc}
+\sigma_1^2 & \rho \sigma_1 \sigma_2 \\
+\rho \sigma_1 \sigma_2 & \sigma_2^2
+\end{array}
+\right]\right)
+$$
+where $\rho \in [0, 1)$ determines how correlated the two predictors are.
+
+I will create now a small function for generating samples from this model.
+```{r}
+generate_data <- function(sigma, sigma1, sigma2, rho, N) 
+{
+  # create the covariance matrix
+  S = c(sigma1**2, rho*sigma1*sigma2, rho*sigma1*sigma2, sigma2**2)
+  S = matrix(S, nrow=2, byrow=TRUE)
+  # generate an array of Gaussian white noise samples
+  E = rnorm(2*N)
+  E = matrix(E, nrow=2, byrow=TRUE)
+  # get samples from a Gaussian with covariance matrix S
+  X = t(t(chol(S)) %*% E) # be sure to understand this operation!
+  X1 = X[,1]
+  X2 = X[,2]
+  # generate the observations from the predictors
+  Y = 1 + 5*X1 - 4*X2 + sigma*rnorm(N)
+  # store everything in a data frame
+  df = data.frame(Y, X1, X2)
+  return(df)
+}
+```
+
+
+#### Some theoretical results first.
+
+Remember from class that if we want to estimate the coefficients of a linear regression model using $N$ samples generated from $\mathcal{M}$, we have to define
+$$
+\mathbf{X} = \left[
+\begin{array}{ccc}
+1 & x_{11} & x_{12} \\
+\vdots & \vdots & \vdots \\
+1 & x_{N1} & x_{N2} \\
+\end{array}
+\right] \quad \mathbf{y} = \left[
+\begin{array}{c}
+y_1 \\ \vdots \\ y_N
+\end{array}
+\right] \quad \hat{\mathbf{\beta}} = \left[
+\begin{array}{c}
+\hat{\beta}_0 \\
+\hat{\beta}_1 \\
+\hat{\beta}_2
+\end{array}
+\right]
+$$
+so that
+$$
+\hat{\mathbf{\beta}}= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+$$
+It is worth noting that in this simple setting with only two parameters and for which the predictors are Gaussian and have zero mean we can write the following
+$$
+\lim_{N \to \infty} \dfrac{1}{N}\mathbf{X}^T\mathbf{X} =  \left[
+\begin{array}{ccc}
+1 & \mathbb{E}[X_1] & \mathbb{E}[X_2] \\
+\mathbb{E}[X_1] & \mathbb{E}[X_1^2] & \mathbb{E}[X_1X_2] \\
+\mathbb{E}[X_2] & \mathbb{E}[X_1X_2] & \mathbb{E}[X_2^2]
+\end{array}
+\right] = \left[
+\begin{array}{ccc}
+1 & 0 & 0 \\
+0 & \sigma_1^2 & \rho~\sigma_1 \sigma_2 \\
+0 & \rho~\sigma_1 \sigma_2 & \sigma_2^2
+\end{array}
+\right]
+$$
+so that in the end we have
+$$
+\left(\dfrac{1}{N}\mathbf{X}^T\mathbf{X}\right)^{-1} \approx \left[
+\begin{array}{ccc}
+1 & 0 & 0 \\
+0 & \dfrac{1}{(1-\rho^2)\sigma_1^2} & \dfrac{-\rho}{(1-\rho^2)\sigma_1\sigma_2} \\
+0 & \dfrac{-\rho}{(1-\rho^2)\sigma_1\sigma_2} & \dfrac{1}{(1-\rho^2)\sigma_2^2} \\
+\end{array}
+\right]
+$$
+We also have that
+$$
+\lim_{N \to \infty} \dfrac{1}{N}\mathbf{X}^T\mathbf{y} = \left[
+\begin{array}{c}
+\mathbb{E}[Y] \\
+\mathbb{E}[X_1 Y] \\
+\mathbb{E}[X_2 Y]
+\end{array}
+\right]
+$$
+Therefore, we can write
+$$
+\hat{\beta}_0 \approx \mathbb{E}[Y] \quad \text{and} \quad \text{Var}(\hat{\beta}_0) = \dfrac{\sigma^2}{N}
+$$
+
+$$
+\hat{\beta}_1 \approx \dfrac{\mathbb{E}[X_1Y]}{(1-\rho^2)\sigma_1^2} - \dfrac{\rho~\mathbb{E}[X_2Y]}{(1-\rho^2)\sigma_1\sigma_2} \quad \text{and} \quad \text{Var}(\hat{\beta}_1) \approx \dfrac{\sigma^2}{N} \times \dfrac{1}{\sigma_1^2 (1-\rho^2)}
+$$
+$$
+\hat{\beta}_2 \approx \dfrac{\mathbb{E}[X_2Y]}{(1-\rho^2)\sigma_2^2} - \dfrac{\rho~\mathbb{E}[X_1Y]}{(1-\rho^2)\sigma_1\sigma_2} \quad \text{and} \quad \text{Var}(\hat{\beta}_2) \approx \dfrac{\sigma^2}{N} \times \dfrac{1}{\sigma_2^2 (1-\rho^2)}
+$$
+Remember that the test statistic for the $t$-test of each coefficient is calculated as
+$$
+T_i = \dfrac{\hat{\beta}_i}{\sqrt{\text{Var}(\hat{\beta}_i)}}
+$$
+and using the actual definition of $Y = \beta_0 + \beta_1 X_1 + \beta_2X_2 + \varepsilon$, we can write
+$$
+\begin{array}{rcl}
+T_0 &\approx& \dfrac{\sqrt{N}}{\sigma} \beta_0  \\[1em]
+T_1 &\approx& \dfrac{\sqrt{N}}{\sigma}\beta_1 \sigma_1\sqrt{1 - \rho^2} \\[1em]
+T_2 &\approx& \dfrac{\sqrt{N}}{\sigma}\beta_2 \sigma_2\sqrt{1 - \rho^2} 
+\end{array}
+$$
+**Conclusion:** We see how the variance of the estimators increase when the correlation between the predictors increases ($\rho \to 1$). Interestingly, when the predictors are independent ($\rho = 0$) the estimators for each parameter are obtained as if we were doing a separate simple linear regression for each predictor. Moreover, the variance of the estimators is the lowest when the predictors are independent and when their variances are large. These different behavior for the variance have a direct impact over the values of the test statistic for the $t$-test. For instance, when $\rho \to 1$ both $T_1$ and $T_2$ tend to zero and the null hypothesis is hardly ever rejected. We see that the number of samples plays an important role in increasing the test statistics, and the observation noise has the opposite effect of reducing their values.
+
+#### Inference under strong colinearity
+Let's consider a setting where the predictors are strongly correlated ($\rho = 0.9$) and have the same variance, with $\sigma_1^2 = 0.25$ and $\sigma_2^2 = 1$. The observation noise is rather high, with $\sigma^2 = 4$. We will fix the number of samples to $N = 25$.
+
+```{r}
+N = 25 # number of samples in the dataset
+sigma = 2
+sigma1 = 0.50
+sigma2 = 0.25
+rho = 0.90
+df = generate_data(sigma, sigma1, sigma2, rho, N) 
+m = lm(Y~1 + X1 + X2, data=df)
+summary(m)
+```
+
+There are a few things we can observe from the results above:
+
+- The $t$-test for both parameters $\hat{\beta}_1$ and $\hat{\beta}_2$ failed to reject the null hypothesis of each one of them being equal to zero. 
+- The $F$-test rejects the null hypothesis of $\hat{\beta}_1$ and $\hat{\beta}_2$ being both zero. 
+- Even though the estimate for $\hat{\beta}_1$ is quite far from zero, its standard error is so large that we can not reject the null hypothesis of it being zero.
+
+**Conclusion:** This simple example illustrates well what can happen when we have two predictors which are strongly correlated. The linear model has trouble rejecting the null hypothesis of each one of them being different than zero. Moreover, we see that the $F$-test is a very important tool, since it is only diagnostic telling us us that the observations $Y$ can be predicted using predictors $X_1$ and $X_2$.

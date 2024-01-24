@@ -1,0 +1,37 @@
+---
+title: "CM1"
+author: "Pedro L. C. Rodrigues"
+date: "January 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Multiple linear regression
+
+We consider the `Advertising` dataset available [[here]](https://www.statlearning.com/s/Advertising.csv).
+
+To load the dataframe we do
+```{r}
+Advertising <- read.csv('./Advertising.csv', header=TRUE)[, 2:5]
+```
+
+and then we can run the multiple linear regression with all of the predictors
+```{r}
+mylm <- lm(sales ~ ., data=Advertising)
+summary(mylm)
+```
+
+We could also consider just one predictor in the regression as in
+```{r}
+mylm1 <- lm(sales ~ newspaper, data=Advertising)
+summary(mylm1)
+```
+
+The correlation matrix between the predictors can be obtained with
+```{r}
+cor(Advertising)
+```
+
