@@ -16,6 +16,11 @@ so you should be checking this page regularly for updates.
 - Alexandre Wendling — alexandre.wendling@univ-grenoble-alpes.fr (TD and TP)
 - Razan Mhanna — razan.mhanna@inria.fr (Complementary courses for M1AM students)
 
+### Discord
+We will be using Discord for chatting, asking questions, etc.
+
+The link to the server is: [https://discord.gg/y8y9DnrwCx](https://discord.gg/y8y9DnrwCx)
+
 ### Schedule
 We will meet on Mondays from 15h30 to 18h30. Each time we will have a 1h30 CM 
 and a 1h30 TD or TP session. 
