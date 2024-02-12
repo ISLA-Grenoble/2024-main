@@ -39,7 +39,7 @@ The (initial) plan for the topics of each of our classes is the following:
 
 - **Week 3 (19-February 2024)**
   - CM3: Cross-validation, model selection, bias-variance tradeoff
-  - TP1: Regression
+  - TP1: Regression -- **Deadline 20-February at 23h59**
 
 - **Week 4 (04-March 2024)**
   - CM4: Principal component analysis
