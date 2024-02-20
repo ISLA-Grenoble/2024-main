@@ -1,0 +1,366 @@
+---
+# title: "Template Work/labsheet"
+# author: "Christophe Dutang, Pedro Rodrigues"
+documentclass: article
+papersize: a4
+geometry: top=1.5cm, bottom=2cm, left=1.5cm, right=1.5cm
+fontsize: 11pt
+output: 
+  pdf_document:
+    extra_dependencies: ["enumitem"]
+    number_sections: false
+    toc: false
+    keep_tex: false
+    includes:
+      in_header: "TDTPpreamble.tex"
+      before_body: "TD-PCA-header.tex"
+      
+---
+
+<!-- see help at https://bookdown.org/yihui/rmarkdown-cookbook/latex-output.html -->
+
+```{r setup, include=FALSE, message=FALSE}
+#see full list >knitr::opts_chunk$get()
+knitr::opts_chunk$set(echo = TRUE, fig.align="center", prompt = TRUE, comment="")
+exercise <- 1
+```
+
+
+
+# Exercise `r exercise`
+```{r, echo=FALSE}
+exercise <- exercise+1
+```
+
+We study economic indicators of 6 countries in 1991.
+Table  \ref{tab:eco91} gives the measures of  6 economic indicators in 12 countries in 1991. 
+
+```{r, echo=FALSE}
+eco91 <- read.table(file = "data/ecoworld1991.txt", header = TRUE)
+library(kableExtra)
+colnames(eco91) <- c("GNB per capita", "Inflation", "Unemployment",
+                                "Foreign exch.", "Population", "Area")
+rownames(eco91) <- c("South Africa", "Algeria", "Germany",
+          "Saudi Arabia", "Brazil", "Egypt",
+           "USA", "Ethiopia", "Finland", "France",
+           "Koweit", "Tunisia")
+kableExtra::kable(eco91, label="eco91",
+                  format = "latex", booktabs = TRUE, align="cccccc",
+                  caption="World economic data in 1991") %>%
+  column_spec(1, bold = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position"))
+```
+
+
+Interpret the results performed by a normalized PCA applied on this table. 
+We give the eigenvalues of the variance/covariance matrix in Table \ref{tab:eco91:PCA}.
+Principal components representation are given in Figure \ref{fig:eco91:PCA}. 
+
+```{r, echo=FALSE}
+ecocr <- scale(eco91)
+ecocr.acp <- prcomp(ecocr)
+# valeurs propres
+lambda <- ecocr.acp$sdev^2
+P <- ecocr.acp$rotation
+```
+
+```{r, echo=FALSE}
+matlambda <- rbind(lambda, cumsum(lambda)/sum(lambda))
+rownames(matlambda) <- c("lambda", "cumul. proportion")
+colnames(matlambda) <- 1:length(lambda)
+kableExtra::kable(matlambda, format = "latex", row.names = TRUE, 
+                  label="eco91:PCA", digits=3,
+                  caption="Eigenvalues of the cov. matrix") %>%
+  kable_styling(latex_options = c("HOLD_position"))
+```
+
+
+
+\begin{figure}[htp]
+  \centering
+  \begin{subfigure}[b]{0.47\textwidth}
+```{r, echo=FALSE, fig.width=5, fig.height=5}
+x <- (-100:100)/100
+y <- sqrt(1-x^2)
+#for(i in 1:6) 
+#  P[,i] <- P[,i] * sqrt(lambda[i])
+
+plot(P[,1], P[,2], xlab="Axis 1", ylab = "Axis 2", xlim=c(-1,1), ylim=c(-1,1))
+abline(h=0, v=0)
+lines(x, y)
+lines(x, -y)
+text(P[, 1], P[, 2]-0.05, names(eco91))
+
+```     
+     
+     \caption{Variable space}
+     \label{fig:eco91:PCA:variable}
+  \end{subfigure}
+  \hspace{5pt}
+  \begin{subfigure}[b]{0.47\textwidth}
+```{r, echo=FALSE, fig.width=5, fig.height=5}
+eco.short.names <- c("RSA", "ALG", "GER",
+          "SAU", "BRA", "EGY",
+           "USA", "ETH", "FIN", "FRA",
+           "KOW", "TUN")
+eco.deltay <- c(-1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1)
+eco.deltax <- c(-1, -1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1)
+set.seed(24681)
+# representation des individus dans les plans principaux
+plot(ecocr.acp$x[, 1], ecocr.acp$x[, 2], xlab="Axis 1", ylab="Axis 2", type="p")
+abline(h=0, v=0)
+text(ecocr.acp$x[, 1]+eco.deltax* runif(12, min=.1, max=.2), ecocr.acp$x[, 2]+eco.deltay*runif(12, min=.1, max=.3), eco.short.names, adj=0)
+```
+     \caption{Individual space}
+     \label{fig:eco91:PCA:individual}
+  \end{subfigure}
+  \caption{Principal component representation in the first plane of the variable and of the sample spaces.}
+  \label{fig:eco91:PCA}
+\end{figure}
+
+
+
+# Exercise `r exercise`
+```{r, echo=FALSE}
+exercise <- exercise+1
+```
+
+We are interested by the dataset \code{cars04} with some car models in 2004. 
+Each car is described by  11 variables listed in table~\ref{tab:cars04:varlist}.
+
+\begin{table}[!hbt]
+\begin{tabular}{ll}
+Variable & Meaning\\
+\hline
+\code{Retail}  & Builder recommended price(US\$)\\
+\code{Dealer}  & Seller price (US\$)\\
+\code{Engine}  & Motor capacity  (liters)\\
+\code{Cylinders}  & Number of cylinders in the motor\\
+\code{Horsepower}  &Engine power\\
+\code{CityMPG}  & Consumption in city (Miles or gallon; proportional to km/liter)\\
+\code{HighwayMPG}  & Consumption on roadway  (Miles or gallon)\\
+\code{Weight}  & Weight (pounds)\\
+\code{Wheelbase}  & Distance between front and rear wheels (inches)\\
+\code{Length}  & Length (inches)\\
+\code{Width}   & Width  (inches)\\
+\hline
+\end{tabular}
+\caption{Variable list for \code{cars04}}
+\label{tab:cars04:varlist}
+\end{table}
+
+
+```{r, echo=FALSE}
+## Load the "cars04" dataset
+cars04 <- read.csv("data/cars-fixed04.csv")[,8:18]
+```
+
+The aim of this exercise is to summarize and to interpret the data \code{cars04} using PCA by
+the following call
+```{r}
+cars04.pca <- prcomp(cars04, scale=TRUE)
+summary(cars04.pca)
+```
+\begin{enumerate}
+\item Using previous \soft{R} traces, what does \code{scale=TRUE} mean? 
+\item Does the representation in the first two principal components give a good idea of dataset variations? 
+\end{enumerate} 
+Principal components are linear combinations of the 11 variables. 
+The coefficients of the first 2  principal components on these 11 variables are
+```{r}
+cars04.pca$rotation[,1:2]
+```
+\begin{enumerate}[resume]
+\item 
+Can you give an interpretation of each of these new variables?
+\end{enumerate} 
+
+On Figure \ref{fig:cars04:PCA}, the projection on the first two principal components 
+of some cars models is plotted.
+
+\begin{enumerate}[resume]
+\item Interpret each quadrant of the Figure.
+\item Can you describe which kind of car Audi RS 6, Ford Expedition 4.6 XLT and Nissan Sentra 1.8 are?
+\end{enumerate} 
+
+```{r, echo=FALSE, eval=FALSE}
+lambda = cars04.pca$sdev^2
+p = dim(cars04)[2]
+
+x = (-100:100)/100
+y = sqrt(1-x^2)
+P = cars04.pca$rotation
+for(i in 1:p) P[,i] = P[,i] * sqrt(lambda[i])
+
+plot(P[,1],P[,2], xlab="Axis 1", ylab = "Axis 2", xlim=c(-1,1), ylim=c(-1,1))
+abline(h=0, v=0)
+lines(x, y)
+lines(x, -y)
+text(P[, 1], P[, 2]-0.05, names(cars04))
+```
+
+
+\begin{figure}[htp]
+  \centering
+  \begin{subfigure}[b]{0.47\textwidth}
+```{r, echo=FALSE, fig.width=5, fig.height=5}
+x <- (-100:100)/100
+y <- sqrt(1-x^2)
+lambda = cars04.pca$sdev^2
+P = cars04.pca$rotation
+for(i in 1:NCOL(P)) 
+  P[,i] <- P[,i] * sqrt(lambda[i])
+
+plot(P[,1], P[,2], xlab="Axis 1", ylab = "Axis 2", xlim=c(-1,1), ylim=c(-1,1))
+abline(h=0, v=0)
+lines(x, y)
+lines(x, -y)
+text(P[, 1]+0.1*rep(c(1,-1), length=NCOL(cars04)), 
+     P[, 2]-0.1*rep(c(1,-1), length=NCOL(cars04)), names(cars04))
+
+```     
+     \caption{Variable space}
+     \label{fig:cars04:PCA:variable}
+  \end{subfigure}
+  \hspace{5pt}
+  \begin{subfigure}[b]{0.47\textwidth}
+```{r, echo=FALSE, fig.width=5, fig.height=5}
+somerows <- c("Audi RS 6", "Ford Expedition 4.6 XLT", "Nissan Sentra 1.8")
+samplrows <- sample(setdiff(rownames(cars04), somerows), 25)
+plot(cars04.pca$x[, 1], cars04.pca$x[, 2], xlab="PC1", ylab="PC2", type="n", xlim=c(-8,8), ylim=c(-4,4))
+abline(h=0, v=0)
+text(cars04.pca$x[samplrows, 1], cars04.pca$x[samplrows, 2], samplrows, cex=0.6, col="grey40")
+text(cars04.pca$x[somerows, 1], cars04.pca$x[somerows, 2], somerows, cex=1.05)
+```
+    \caption{Individual space}
+     \label{fig:cars04:PCA:individual}
+  \end{subfigure}
+\caption{Principal component representation in the first plane of the variable and of the sample spaces.}
+  \label{fig:cars04:PCA}
+\end{figure}
+
+
+
+
+# Exercise `r exercise`
+```{r, echo=FALSE}
+exercise <- exercise+1
+```
+
+Correspondence  Analysis (CA) is an adaptation of PCA  to study couples of qualitative variables. 
+Let consider a couple of qualitative variables $(X,Y)$ observed on $n$ samples. 
+The observations are denoted  $((x_1,y_1),\ldots,(x_n,y_n))$. 
+Two PCAs will be performed. 
+\begin{itemize}
+\item
+The first PCA considers the labels $i$ of $X$ as individuals. 
+Each individual is described by  conditional frequencies
+$f(Y=1 | X=i),\ldots,f(Y=L | X=i)$ of values $j$ of the variable $Y$ given 
+$X=i$. 
+\item
+The second PCA considers the labels $j$ of $Y$ as individuals. 
+Each individual is now  characterized by conditional frequencies 
+$f(X=1 | Y=j),\ldots,f(X=K | Y=j)$. 
+\end{itemize}
+The interpretations of these two PCAs can be done as usual. 
+The  advantage of CA is its ability to represent  both PCAs on the same graph. 
+It allows to associate the values $i$ of $X$ with values $j$ of $Y$ 
+using inner product between these two vectors.
+\begin{itemize}
+\item
+If the inner product is positive, it means that  $(X=i, Y=j)$ is more frequent in 
+the population than it would be under independence between $X$ and $Y$. 
+\item
+If the value is negative, it means that we would expect more couples $(X=i, Y=j)$ 
+under independence property.
+\end{itemize}
+
+We propose to apply CA on results recorded after the first turn of presidential 
+election in France in 2017. $X$ represent  the candidates and 
+$Y$ the overseas departments. Interpret the CA results.
+
+N.B. \textit{Candidate Lassalle was removed because he obtained quite small percentages of votes 
+but with a very high relative variability.}
+
+
+\begin{figure}[htp]
+  \centering
+  \begin{subfigure}[b]{0.47\textwidth}
+    \includegraphics{img/elec2017_afc12_z}
+     \caption{PCA on samples: Departments and  candidates (axes 1 and 2)}
+     \label{fig:elec2017:axis12}
+  \end{subfigure}
+  \hspace{5pt}
+  \begin{subfigure}[b]{0.47\textwidth}
+    \includegraphics{img/elec2017_afc13_z}
+    \caption{PCA on samples: Departments and  candidates (axes 1 and 3)}
+     \label{fig:elec2017:axis13}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.47\textwidth}
+    \includegraphics{img/elec2017_afc12_var_z}
+     \caption{PCA on candidates considered as variables (axes 1 and 2)}
+     \label{fig:elec2017:axis12:var}
+  \end{subfigure}
+  \hspace{5pt}
+  \begin{subfigure}[b]{0.47\textwidth}
+    \includegraphics{img/elec2017_afc13_var_z}
+    \caption{PCA on candidates considered as variables (axes 1 and 3)}
+     \label{fig:elec2017:axis13:var}
+  \end{subfigure}
+  \caption{Principal axes of the two PCA}
+\end{figure}
+
+
+
+
+# Exercise `r exercise`
+```{r, echo=FALSE}
+exercise <- exercise+1
+```
+
+\begin{enumerate}
+\item Prove Proposition \ref{theo:inertia_projection}. 
+\begin{proposition}
+	Let $x^\prime_i = x_i - {\bar x}_i$ (for $i=1,\ldots,n$) be some centred sample in dimension $p$ with covariance matrix~$\Sigma$. Then the canonical inertia of these points ${\displaystyle{\frac{1}{n}\sum\limits_{i=1}^n \|x^\prime_i\|^2}}$ is ${\mbox{tr}}(\Sigma)$.\\
+	Let $\Pi$ some orthogonal projection (with the canonical dot product). Then the inertia of the projected points is ${\mbox{tr}}(\Sigma \Pi)$.
+	\label{theo:inertia_projection}
+\end{proposition}
+\item As a bonus, prove its Corollaries.
+\begin{corollary}
+	As a consequence, for standardized samples, ${\displaystyle{\frac{1}{n}\sum\limits_{i=1}^n \|x^\prime_i\|^2}} = p$.
+\end{corollary}	
+\begin{corollary}
+	The projected inertia on the sum of two orthogonal subspaces is the sum of the projected inertia on each subspace.
+\end{corollary}	
+Hint: for any $a \in \R,\, a = {\mbox{tr}}(a)$.
+\end{enumerate}
+
+
+# Exercise `r exercise`
+```{r, echo=FALSE}
+exercise <- exercise+1
+```
+
+\begin{enumerate}
+\item Prove Proposition \ref{theo:inertia_optimization}. 
+\begin{proposition}
+	    We use the notations in Proposition \ref{theo:inertia_projection}.\\
+		Let $a_1$ some vector with norm 1 such that $\Sigma a_1 = \lambda_1 a_1$, $\lambda_1$ being (one of) the highest eigenvalue of $\Sigma$. Then the projected inertia on the line $D_1={\mbox{Span}}(a_1)$ is maximal over projected inertia on all other possible lines. \\
+		Moreover, the projected inertia on $D_1$ is $\lambda_1$.	
+	\label{theo:inertia_optimization}		
+\end{proposition}
+\end{enumerate}
+Hints: 
+	\begin{itemize}
+	\item Use the results from multiple linear regression to prove that for any matrix $X$ with linearly independent columns $X^{(1)},\ldots, X^{(p)}$, the matrix of the orthogonal projection on ${\mbox{Span}}\left(\left\lbrace X^{(1)},\ldots, X^{(p)}\right\rbrace\right)$ is $X (X^T X)^{-1} X^T$ (or admit this result if it does not seem obvious).
+	\item Write the maximization problem as 
+	$$
+	\max\limits_{a, \|a\|=1} {\mbox{tr}}(\Sigma a a^T).
+	$$
+	\item Introduce a Lagrange multiplier $\xi$ and cancel the gradient of 
+	$$
+	(a, \xi) \rightarrow a^T \Sigma a - \xi (a^T a-1).
+	$$
+	\end{itemize}
+
+
