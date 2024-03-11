@@ -221,7 +221,48 @@ def make_figure_03(n_points, seed=42):
     return fig, ax
 
 
-def make_figure_04(n_points, seed):
+def make_figure_04a(n_points, seed):
+
+    X, y = generate_dataset(n_points, seed)
+
+    # level 0
+    var = X.var(axis=0)
+    dim_0 = var.argmax()
+    t_0 = np.median(X[:, dim_0])
+
+    # level 1 (up)
+    sel_1_up = (X[:, dim_0] < t_0)
+    var = X[sel_1_up].var(axis=0)
+    dim_1_up = var.argmax()
+    t_1_up = np.median(X[sel_1_up, dim_1_up])
+
+    # level 1 (down)
+    sel_1_down = (X[:, dim_0] >= t_0)
+    var = X[sel_1_down].var(axis=0)
+    dim_1_down = var.argmax()
+    t_1_down = np.median(X[sel_1_down, dim_1_down])
+
+    fig, ax = plt.subplots(figsize=(7.0, 6.5))
+    colors = {0: 'k', 1: 'k'}
+    for cl in np.unique(y):
+        ax.scatter(X[y == cl, 0], X[y == cl, 1], c=colors[cl], s=30)
+
+    ax.set_xlim(-2.5, 5.5)
+    ax.set_ylim(-2.5, 3.0)
+    for axis in ['top', 'bottom', 'left', 'right']:
+        ax.spines[axis].set_linewidth(1.2)
+    ax.set_xlabel(r'$X_1$', fontsize=16)
+    ax.set_ylabel(r'$X_2$', fontsize=16)
+
+    ax.axvline(x=t_0, ls='--', c='C4')
+    xthr = (t_0-ax.get_xlim()[0])/np.diff(ax.get_xlim())[0]
+    ax.axhline(y=t_1_up, xmin=0, xmax=xthr, ls='--', c='C4')
+    ax.axhline(y=t_1_down, xmin=xthr, xmax=1.0, ls='--', c='C4')
+
+    return fig, ax
+
+
+def make_figure_04b(n_points, seed):
 
     X, y = generate_dataset(n_points, seed)
 
@@ -325,14 +366,15 @@ def make_figure_06(n_points, seed):
         response_method='predict',
         ax=ax,
         levels=0,
-        colors='C2'
+        colors='C4',
+        linestyles='dashed'
     )
 
-    Z1, Z2, t = get_bayes_boundary(n_grid=51)
-    ax.contour(Z1, Z2, t,
-               levels=np.array([0.0]),
-               colors='k',
-               linestyles='dashed')
+    # Z1, Z2, t = get_bayes_boundary(n_grid=51)
+    # ax.contour(Z1, Z2, t,
+    #            levels=np.array([0.0]),
+    #            colors='k',
+    #            linestyles='dashed')
 
     ax.set_xlim(-2.5, 5.5)
     ax.set_ylim(-2.5, 3.0)
@@ -347,7 +389,8 @@ def make_figure_06(n_points, seed):
 make_figure_list = [make_figure_01,
                     make_figure_02a,
                     make_figure_02b,
-                    make_figure_04,
+                    make_figure_04a,
+                    make_figure_04b,
                     make_figure_05,
                     make_figure_06]
 

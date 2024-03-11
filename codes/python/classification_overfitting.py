@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import multivariate_normal
+from scipy.stats import multivariate_normal as mvn
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from tqdm import tqdm
 import pandas as pd
 
@@ -54,16 +56,16 @@ def generate_dataset(n_samples=100, eps=1.0, seed=42):
     C_1 = parameters['C_1']
 
     # sample points from each class and join them into a single array
-    X_00 = multivariate_normal.rvs(mean=m_01, cov=C_01, size=int(n_samples/2))
-    X_01 = multivariate_normal.rvs(mean=m_02, cov=C_02, size=int(n_samples/2))
-    X_1 = multivariate_normal.rvs(mean=m_1, cov=C_1, size=n_samples)
+    X_00 = mvn.rvs(mean=m_01, cov=C_01, size=int(n_samples/2))
+    X_01 = mvn.rvs(mean=m_02, cov=C_02, size=int(n_samples/2))
+    X_1 = mvn.rvs(mean=m_1, cov=C_1, size=n_samples)
     X = np.concatenate([X_00, X_01, X_1])
     y = np.array(n_samples*[0] + n_samples*[1])
 
     return X, y
 
 
-def get_bayes_boundary(n_grid=51, seed=42):
+def get_bayes_boundary(n_grid=51):
 
     # get the simulation model parameters
     parameters = get_dataset_parameters()
@@ -79,13 +81,33 @@ def get_bayes_boundary(n_grid=51, seed=42):
     Z1, Z2 = np.meshgrid(z1, z2)
     Z = np.stack([Z1.flatten(), Z2.flatten()]).T
 
-    pdf_00 = multivariate_normal.pdf(x=Z, mean=m_01, cov=C_01)
-    pdf_01 = multivariate_normal.pdf(x=Z, mean=m_02, cov=C_02)
-    pdf_1 = multivariate_normal.pdf(x=Z, mean=m_1, cov=C_1)
+    pdf_00 = mvn.pdf(x=Z, mean=m_01, cov=C_01)
+    pdf_01 = mvn.pdf(x=Z, mean=m_02, cov=C_02)
+    pdf_1 = mvn.pdf(x=Z, mean=m_1, cov=C_1)
     t = (0.5 * pdf_00 + 0.5 * pdf_01) - pdf_1
     t = np.reshape(t, [n_grid, n_grid])
 
     return Z1, Z2, t
+
+
+def bayes_classifier(x):
+
+    # get the simulation model parameters
+    parameters = get_dataset_parameters()
+    m_01 = parameters['m_01']
+    C_01 = parameters['C_01']
+    m_02 = parameters['m_02']
+    C_02 = parameters['C_02']
+    m_1 = parameters['m_1']
+    C_1 = parameters['C_1']
+
+    pdf_00 = mvn.pdf(x=x, mean=m_01, cov=C_01)
+    pdf_01 = mvn.pdf(x=x, mean=m_02, cov=C_02)
+    pdf_1 = mvn.pdf(x=x, mean=m_1, cov=C_1)
+
+    y_pred = (pdf_1 > (0.5 * pdf_00 + 0.5 * pdf_01)).astype(int)
+
+    return y_pred
 
 
 def select_mixture(x):
@@ -101,20 +123,13 @@ def generate_dataset_esl(n_samples):
     means_0 = df.values[:10, :]
     means_1 = df.values[10:, :]
 
-    # x_0 = np.zeros((n_samples, 2, 10))
-    # x_1 = np.zeros((n_samples, 2, 10))
-    # for i in range(10):
-    #     x_0[:, :, i] = multivariate_normal.rvs(mean=means_0[i], size=n_samples)
-    #     x_1[:, :, i] = multivariate_normal.rvs(mean=means_1[i], size=n_samples)
-    # x_0 = np.apply_along_axis(select_mixture, 2, x_0)
-    # x_1 = np.apply_along_axis(select_mixture, 2, x_1)
-
     x_0 = np.zeros((n_samples, 2))
     x_1 = np.zeros((n_samples, 2))
     for i in range(n_samples):
-        k = np.random.choice(10, 1)[0]
-        x_0[i, :] = multivariate_normal.rvs(mean=means_0[k], size=1)
-        x_1[i, :] = multivariate_normal.rvs(mean=means_1[k], size=1)
+        k_0 = np.random.choice(10, 1)[0]
+        x_0[i, :] = mvn.rvs(mean=means_0[k_0], size=1)
+        k_1 = np.random.choice(10, 1)[0]
+        x_1[i, :] = mvn.rvs(mean=means_1[k_1], size=1)
 
     X = np.concatenate([x_0, x_1])
     y = np.array(n_samples*[0] + n_samples*[1])
@@ -123,49 +138,107 @@ def generate_dataset_esl(n_samples):
     return X[idx], y[idx]
 
 
-eps = 0.25
-scores_train_mc = []
-scores_test_mc = []
-for rzt in range(10):
-    X_train, y_train = generate_dataset(n_samples=100, eps=eps, seed=rzt)
-    X_test, y_test = generate_dataset(n_samples=5_000, eps=eps, seed=rzt)
-    scores_train = []
-    scores_test = []
-    k_list = np.arange(1, 150+1)
-    for k in tqdm(k_list):
-        clf = KNeighborsClassifier(n_neighbors=k)
-        clf.fit(X_train, y_train)
-        scores_train.append(1 - clf.score(X_train, y_train))
-        scores_test.append(1 - clf.score(X_test, y_test))
-    scores_train_mc.append(np.array(scores_train))
-    scores_test_mc.append(np.array(scores_test))
+def make_figure_knn_overfitting(eps):
 
-fig, ax = plt.subplots(figsize=(8, 6))
-ax.plot(k_list,
-        np.mean(scores_train_mc, axis=0),
-        lw=2.0,
-        c='C0',
-        label='train')
-ax.plot(k_list,
-        np.mean(scores_test_mc, axis=0),
-        lw=2.0,
-        c='C1',
-        label='test')
-ax.set_xlim(k_list[-1], k_list[0])
-ax.legend()
-ax.set_xscale('log')
+    scores_train_mc = []
+    scores_test_mc = []
+    for rzt in range(10):
+        X_train, y_train = generate_dataset(n_samples=100, eps=eps, seed=rzt)
+        X_test, y_test = generate_dataset(n_samples=5_000, eps=eps, seed=rzt)
+        scores_train = []
+        scores_test = []
+        k_list = np.arange(1, 150+1)
+        for k in tqdm(k_list):
+            clf = KNeighborsClassifier(n_neighbors=k)
+            clf.fit(X_train, y_train)
+            scores_train.append(1 - clf.score(X_train, y_train))
+            scores_test.append(1 - clf.score(X_test, y_test))
+        scores_train_mc.append(np.array(scores_train))
+        scores_test_mc.append(np.array(scores_test))
+
+    X_test, y_test = generate_dataset(n_samples=5_000, eps=1.0)
+    y_pred = bayes_classifier(X_test)
+    bayes_error = 1-np.mean(y_pred == y_test)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.plot(k_list,
+            np.mean(scores_train_mc, axis=0),
+            lw=2.0,
+            c='C0',
+            label='train')
+    ax.plot(k_list,
+            np.mean(scores_test_mc, axis=0),
+            lw=2.0,
+            c='C1',
+            label='test')
+    ax.axhline(y=bayes_error, ls='--', c='k', lw=2.0, label='bayes')
+    ax.set_xlim(k_list[-1], k_list[0])
+    ax.legend()
+    ax.set_xlabel('K')
+    ax.set_ylabel('Error rate')
+    ax.set_xscale('log')
+    ax.set_title('Error curves for k-NN')
+
+    return fig, ax
+
+
+def make_figure_decisiontree_overfitting(eps):
+
+    eps = 1.0
+    scores_train_mc = []
+    scores_test_mc = []
+    for rzt in range(10):
+        X_train, y_train = generate_dataset(n_samples=100, eps=eps, seed=rzt)
+        X_test, y_test = generate_dataset(n_samples=5_000, eps=eps, seed=rzt)
+        scores_train = []
+        scores_test = []
+        d_list = np.arange(1, 7+1)
+        for d in tqdm(d_list):
+            clf = DecisionTreeClassifier(criterion="entropy", max_depth=d)
+            clf.fit(X_train, y_train)
+            scores_train.append(1 - clf.score(X_train, y_train))
+            scores_test.append(1 - clf.score(X_test, y_test))
+        scores_train_mc.append(np.array(scores_train))
+        scores_test_mc.append(np.array(scores_test))
+
+    X_test, y_test = generate_dataset(n_samples=5_000, eps=1.0)
+    y_pred = bayes_classifier(X_test)
+    bayes_error = 1-np.mean(y_pred == y_test)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.plot(d_list,
+            np.mean(scores_train_mc, axis=0),
+            lw=2.0,
+            c='C0',
+            label='train')
+    ax.scatter(d_list,
+               np.mean(scores_train_mc, axis=0),
+               s=80,
+               c='C0')
+    ax.plot(d_list,
+            np.mean(scores_test_mc, axis=0),
+            lw=2.0,
+            c='C1',
+            label='test')
+    ax.scatter(d_list,
+               np.mean(scores_test_mc, axis=0),
+               s=80,
+               c='C1')
+    ax.axhline(y=bayes_error, ls='--', c='k', lw=2.0, label='bayes')
+    ax.legend()
+    ax.set_xlabel('Tree depth')
+    ax.set_ylabel('Error rate')
+    ax.set_title('Error curves for Decision Trees')
+
+    return fig, ax
+
+
+eps = 1.0
+
+fig, ax = make_figure_knn_overfitting(eps)
 filename = f'knn-train-test-curve-eps-{eps}.pdf'
 fig.savefig(filename, format='pdf')
 
-# X, y = generate_dataset_esl(n_samples=500)
-# fig, ax = plt.subplots(figsize=(7.0, 6.5))
-# colors = {0: 'C0', 1: 'C1'}
-# for cl in np.unique(y):
-#     ax.scatter(X[y == cl, 0], X[y == cl, 1], c=colors[cl], s=30)
-# # ax.set_xlim(-2.5, 5.5)
-# # ax.set_ylim(-2.5, 3.0)
-# for axis in ['top', 'bottom', 'left', 'right']:
-#     ax.spines[axis].set_linewidth(1.2)
-# ax.set_xlabel(r'$X_1$', fontsize=16)
-# ax.set_ylabel(r'$X_2$', fontsize=16)
-# fig.show()
+fig, ax = make_figure_decisiontree_overfitting(eps)
+filename = f'decisiontree-train-test-curve-eps-{eps}.pdf'
+fig.savefig(filename, format='pdf')
