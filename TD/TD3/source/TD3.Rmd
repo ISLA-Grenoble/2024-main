@@ -55,7 +55,7 @@ Which of the following is a gradient of the loss $\mathcal{L}$?
  \renewcommand{\labelitemi}{\scriptsize$\square$}
 \item[(A)] $\nabla \mathcal{L}(\boldsymbol{\beta}) = \dfrac{1}{N}\displaystyle\sum_{i = 1}^N \left(\mathbf{x}_i \dfrac{e^{\mathbf{x}_i^\top \boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\top \boldsymbol{\beta}}} - y_i \mathbf{x}_i^\top \boldsymbol{\beta}\right)$
 \item[(B)] $\nabla \mathcal{L}(\boldsymbol{\beta}) = \dfrac{1}{N}\displaystyle\sum_{i = 1}^N \mathbf{x}_i\left(y_i - \dfrac{e^{\mathbf{x}_i^\top \boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\top \boldsymbol{\beta}}}\right)$
-\item[(C)] $\nabla \mathcal{L}(\boldsymbol{\beta}) = \dfrac{1}{N}\displaystyle\sum_{i = 1}^N \mathbf{x}_i\left(\dfrac{1}{1 + e^{\mathbf{x}_i^\top \boldsymbol{\beta}}} - y_i\right)$
+\item[(C)] $\nabla \mathcal{L}(\boldsymbol{\beta}) = \dfrac{1}{N}\displaystyle\sum_{i = 1}^N \mathbf{x}_i\left(\dfrac{1}{1 + e^{-\mathbf{x}_i^\top \boldsymbol{\beta}}} - y_i\right)$
 \item[(D)] None of the above.
 \end{itemize}
 
