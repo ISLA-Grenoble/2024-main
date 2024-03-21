@@ -51,7 +51,7 @@ The (initial) plan for the topics of each of our classes is the following:
   
 - **Week 6.1 (18-March 2024)**
   - CM6: Linear classification — Generative approach
-  - TP2: Principal components regression (PCR)
+  - TP2: Principal components regression (PCR) -- **Deadline 19-March at 23h59**
   
 - **Week 6.2 (22-March 2024)**
   - TD3: Some questions from previous exams (17h00)
