@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.24)  23 FEB 2024 21:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.24)  25 MAR 2024 17:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -678,11 +678,11 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 3
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2] [3] (./TP3.aux) ) 
 Here is how much of TeX's memory you used:
- 18405 strings out of 478994
- 300267 string characters out of 5858183
+ 18407 strings out of 478994
+ 300289 string characters out of 5858183
  645694 words of memory out of 5000000
  35484 multiletter control sequences out of 15000+600000
- 469750 words of font info for 125 fonts, out of 8000000 for 9000
+ 469833 words of font info for 126 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  71i,9n,77p,658b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/l
@@ -707,7 +707,7 @@ m/lmr8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsy10.pfb
 l/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/
 2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texl
 ive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on TP3.pdf (3 pages, 232323 bytes).
+Output written on TP3.pdf (3 pages, 232325 bytes).
 PDF statistics:
  113 PDF objects out of 1000 (max. 8388607)
  90 compressed objects within 1 object stream
