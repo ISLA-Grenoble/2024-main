@@ -62,11 +62,11 @@ The (initial) plan for the topics of each of our classes is the following:
   
 - **Week 8 (08-April 2024)**
   - CM8: Ensemble methods
-  - TP3: Benchmarking classification methods
+  - TP3: Benchmarking classification methods -- **Deadline 09-April at 23h59**
 
 - **Week 9 (15-April 2024)**
   - CM9: Performance metrics, overfitting, data leaking, etc
-  - TP4: Random forests
+  - TP4: Classification on real data
 
 - **Week 10 (29-April 2024)**
   - CM10: Introduction to network analysis
@@ -91,6 +91,3 @@ You will be doing five TPs during this class and your final TP score will be bas
 
 #### -- Concerning the final exam
 The final exam will be a 3h practical evaluation on the computers from ENSIMAG. It will have some multiple-choice questions to evaluate your theoretical knowledge and some practical questions similar to what you will do in the TPs. You will not have access to any internet connections, but you can bring your own handwritten notes, books, printed slides, etc. In the computer that you will use, we will provide you a folder with the instructions for the exam, the `rmd` files to fill with your answers and code, as well as the textbooks of the course.
-
-### Some useful online resources
-[TODO]
