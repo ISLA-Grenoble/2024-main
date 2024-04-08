@@ -1,0 +1,31 @@
+---
+documentclass: article
+papersize: a4
+geometry: top=1.5cm, bottom=2cm, left=1.5cm, right=1.5cm
+fontsize: 11pt
+output:
+  pdf_document:
+    extra_dependencies: enumitem
+    number_sections: yes
+    toc: no
+    keep_tex: no
+    includes:
+      in_header: TP4-preamble.tex
+      before_body: TP4-header.tex
+  html_document:
+    toc: no
+    df_print: paged
+---
+
+<!-- see help at https://bookdown.org/yihui/rmarkdown-cookbook/latex-output.html -->
+
+```{r setup, include=FALSE, message=FALSE}
+#see full list >knitr::opts_chunk$get()
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+```
+
+The guidelines for this TP are **very simple**. You will have to create a Kaggle account and participate at the famous Titanic challenge competition available here: \textcolor{blue}{\href{https://www.kaggle.com/competitions/titanic/}{kaggle.com/competitions/titanic}}. You will submit your predictions at the Kaggle website and include your score on the test dataset in your final report (with your username from Kaggle).
+
+You are expected to submit a report at TEIDE describing the steps that you've done for your submission at Kaggle. These include describing your initial exploratory data analysis, choices on how to encode the categorical predictors, feature engineering, cross-validation, etc, etc.
+
+Have fun!
