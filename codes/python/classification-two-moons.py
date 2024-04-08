@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from tqdm import tqdm
 from functools import partial
 
@@ -59,32 +59,7 @@ clf_dict['decision_tree'] = DecisionTreeClassifier(
     criterion='entropy', max_depth=6)
 clf_dict['log_reg'] = LogisticRegression()
 clf_dict['knn'] = KNeighborsClassifier(n_neighbors=10)
+clf_dict['random_forest'] = RandomForestClassifier(
+    n_estimators=100, criterion='entropy')
 
-make_dataset_dict = {}
-make_dataset_dict['two_moons'] = partial(make_moons, noise=0.3)
-make_dataset_dict['make_classifier'] = partial(
-    make_classification, n_features=2, n_informative=2, n_redundant=0)
-
-# make_figures_decision_boundaries(clf_dict=clf_dict)
-
-make_dataset = make_dataset_dict['two_moons']
-nrzt = 5
-
-X_test, y_test = make_dataset(n_samples=10_000, random_state=666)
-
-scr = []
-for n in tqdm([1, 2, 3, 5, 10, 20, 50]):
-
-    clf = BaggingClassifier(
-        estimator=clf_dict['decision_tree'], n_estimators=n)
-
-    error_rzt_list = []
-    for rzt in range(nrzt):
-        X_train, y_train = make_dataset(n_samples=100, random_state=nrzt)
-        X_test, y_test = make_dataset(n_samples=10_000, random_state=42*nrzt+123)
-        clf.fit(X_train, y_train)
-        error_rzt_list.append(1 - clf.score(X_test, y_test))
-
-    scr.append(np.mean(error_rzt_list))
-
-print(scr)
+make_figures_decision_boundaries(clf_dict=clf_dict)
