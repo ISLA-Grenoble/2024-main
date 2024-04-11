@@ -65,8 +65,8 @@ The (initial) plan for the topics of each of our classes is the following:
   - TP3: Benchmarking classification methods -- **Deadline 09-April at 23h59**
 
 - **Week 9 (15-April 2024)**
-  - CM9: Performance metrics, overfitting, data leaking, etc
-  - TP4: Classification on real data
+  - CM9: ML competitions, metric, etc.
+  - TP4: The Titanic machine learning competition
 
 - **Week 10 (29-April 2024)**
   - CM10: Introduction to network analysis
