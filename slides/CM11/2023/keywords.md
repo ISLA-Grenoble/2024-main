@@ -1,0 +1,39 @@
+- Multivariate statistics
+  - Correlation, covariance matrix
+  - Multivariate normal distribution
+  - Matrix algebra
+- Bias-variance decomposition
+- Training and test error
+- Cross-validation
+- Model selection
+
+- Overfitting
+- (Gaussian) Multiple linear regression
+  - Loss function, gradient, normal equations
+  - t-test, F-test, confidence intervals, RSS
+  - Ridge or L2 regularization
+  - Colinearity between predictors
+  - Categorical variables
+- Bayes classifier
+  - Analytical expression given pdf of classes
+  - Classifier boundary
+- Linear classifiers -- generative and discriminative
+  - Logistic regression, kNN, LDA, QDA, Naive Bayes
+  - How do these classifiers compare vs each other?
+- Principal component analysis
+  - SVD, re-center and/or scaling data matrix
+  - Eigenvectors, eigenvalues -- how to calculate them in `R` 
+  - Principal components regression
+- Basics of network analysis
+  - Adjacency matrix -- how to build a graph in `R`
+  - Eigenvector centrality
+  - PageRank
+  - Edge betweenness
+- Measures and metrics in networks
+  - Laplacian matrix for graph embedding
+  - Modularity -- definition, how to calculate
+  - Node similarity with cosine and Jaccard coefficient
+- Community detection
+  - Hierarchical methods (agglomerative and divisive)
+  - Spectral method based on modularity matrix
+

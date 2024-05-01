@@ -1,5 +1,15 @@
 # Introduction to statistical learning and applications 2024
 
+-----
+
+### Attention
+
+As explained in class, you are all expected to have read the article
+
+Mark Newman "Modularity and community structure in networks” [link](https://arxiv.org/abs/physics/0602124)
+
+-----
+
 Hi :wave: 
 
 This is the main page to look for materials of our classes on "Introduction to 
