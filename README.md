@@ -6,7 +6,7 @@
 
 For the final exam happening on Wednesday 15-May, you you are all expected to have read the article
 
-Mark Newman "Modularity and community structure in networks” [link](https://arxiv.org/abs/physics/0602124)
+> Mark Newman "Modularity and community structure in networks” [link](https://arxiv.org/abs/physics/0602124)
 
 -----
 
